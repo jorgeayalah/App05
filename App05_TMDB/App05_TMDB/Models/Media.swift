@@ -15,7 +15,6 @@ struct Media : Identifiable {
     var voteAvg : Double
     var genres : [String]
     var releaseDate : String
-    
 }
 
 extension Media{

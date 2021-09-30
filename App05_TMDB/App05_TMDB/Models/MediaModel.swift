@@ -89,4 +89,42 @@ class MediaModel : ObservableObject{
             }
         }
     }
+    
+    func loadMoviePosters(id: Int, handler: @escaping(_ returnedImages: [String]) -> ()){ //extracts series now playing data from APIs on Dependencies
+        let URL = "\(tmdbURL)movie/\(id)/images?api_key=\(apikey)" //change this
+        //connection to Alamofire
+        AF.request(URL, method: .get, encoding: URLEncoding.default, headers: HTTPHeaders(headers)).responseData { [self] data in
+            
+            let json = try! JSON(data: data.data!) //creates an optional variable in case it doesnt contain data
+            
+            var images = [String]()
+            for image in json["posters"]{
+                if image.1["width"].intValue == 2000 && image.1["iso_639_1"].stringValue == "en"{
+                    images.append(image.1["file_path"].stringValue)
+                }
+            }
+            handler(images)
+        }
+    }
+    
+    func loadMovieTrailers(id: Int, handler: @escaping(_ returnedTrailers: [Trailer]) -> ()){ //extracts trailers from movies now playing data from APIs on Dependencies
+        let URL = "\(tmdbURL)movie/\(id)/videos?api_key=\(apikey)&language=en-US" //change this
+        //connection to Alamofire
+        AF.request(URL, method: .get, encoding: URLEncoding.default, headers: HTTPHeaders(headers)).responseData { [self] data in
+            
+            let json = try! JSON(data: data.data!) //creates an optional variable in case it doesnt contain data
+            
+            var trailers = [Trailer]()
+            var trailer : Trailer
+            for t in json["results"]{
+                trailer = Trailer(id: t.1["id"].stringValue,
+                                  name: t.1["name"].stringValue,
+                                  key: t.1["key"].stringValue,
+                                  type: t.1["type"].stringValue)
+                trailers.append(trailer)
+            }
+            trailers.sort {$0.type > $1.type}
+            handler(trailers)
+        }
+    }
 }

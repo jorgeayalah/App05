@@ -17,3 +17,4 @@ let headers = [
     "Content-Type": "application/json" ]
 let tmdbURL = "https://api.themoviedb.org/3/"
 let imageURL = "https://image.tmdb.org/t/p/original" //prefix used for images
+let youtubeURL = "https://youtu.be/"

@@ -18,7 +18,7 @@ struct MoviesView: View {
                 HStack{
                     ForEach(mediaModel.moviesNowPlaying){
                         movie in
-                        NavigationLink(destination: MediaDataView(media: movie)){
+                        NavigationLink(destination: MediaDataView(mediaModel: MediaModel(), media: movie)){
                             MediaRowView(media: movie, width: geo.size.width)
                         }
                         //to be changed

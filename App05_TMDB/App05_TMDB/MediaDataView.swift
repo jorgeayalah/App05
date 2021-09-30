@@ -9,26 +9,55 @@ import SwiftUI
 import Kingfisher
 
 struct MediaDataView: View {
+    @StateObject var mediaModel : MediaModel
     var media : Media
-    
+    @State var posters = [String]()
+    @State var trailers = [Trailer]()
     
     var body: some View {
         GeometryReader { geo in
             ScrollView(.vertical, showsIndicators: false){
                 VStack{
                     Text(media.title)
+                        .font(.title)
                     Text(media.overview)
-                    HStack{
-                        ForEach(media.genres, id: \.self) { g in
-                            Text(g)
-                                .padding()
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                    ScrollView(.horizontal, showsIndicators: false){
+                        HStack{
+                            ForEach(media.genres, id: \.self) { g in
+                                Text(g)
+                                    .padding()
+                            }
                         }
                     }
-                    KFImage(URL(string: "\(imageURL)\(media.poster)"))
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: geo.size.width-40)
+                    NavigationLink(
+                        destination: TrailersView(trailers: $trailers),
+                        label: {
+                            Label("Trailer", systemImage: "play.tv")
+                        })
+                    if posters.count > 0 {
+                        TabView{
+                            ForEach(posters, id: \.self){ poster in
+                                KFImage(URL(string: "\(imageURL)\(poster)"))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            }
+                        }
+                        .frame(width: geo.size.width-40, height: (geo.size.width-40)/0.666667)
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                    }
                 }.padding(.horizontal, 20)
+            }
+            .onAppear{ //when the view opens for the first time
+                mediaModel.loadMoviePosters(id: media.id, handler:{(returnedImages) in
+                    self.posters.removeAll()
+                    self.posters.append(contentsOf: returnedImages)
+                })
+                mediaModel.loadMovieTrailers(id: media.id, handler:{(returnedTrailers) in
+                    self.trailers.removeAll()
+                    self.trailers.append(contentsOf: returnedTrailers)
+                })
             }
         }
     }
@@ -36,6 +65,6 @@ struct MediaDataView: View {
 
 struct MediaDataView_Previews: PreviewProvider {
     static var previews: some View {
-        MediaDataView(media: Media.dummy)
+        MediaDataView(mediaModel: MediaModel(), media: Media.dummy)
     }
 }
