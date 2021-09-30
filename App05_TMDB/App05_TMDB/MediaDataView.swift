@@ -10,8 +10,10 @@ import Kingfisher
 
 struct MediaDataView: View {
     var media : Media
+    
+    
     var body: some View {
-        GeometryReader{ geo in
+        GeometryReader { geo in
             ScrollView(.vertical, showsIndicators: false){
                 VStack{
                     Text(media.title)
@@ -26,8 +28,7 @@ struct MediaDataView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: geo.size.width-40)
-                        .padding(.horizontal, 20)
-                }
+                }.padding(.horizontal, 20)
             }
         }
     }

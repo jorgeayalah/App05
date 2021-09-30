@@ -22,6 +22,7 @@
 		FBE1C04727022B3200F41E20 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE1C04627022B3200F41E20 /* Media.swift */; };
 		FBE1C04A2702369200F41E20 /* MediaRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE1C0492702369200F41E20 /* MediaRowView.swift */; };
 		FBE1C04D2702398900F41E20 /* MediaDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE1C04C2702398900F41E20 /* MediaDataView.swift */; };
+		FBE1C05027060A9B00F41E20 /* RateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE1C04F27060A9B00F41E20 /* RateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		FBE1C04627022B3200F41E20 /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 		FBE1C0492702369200F41E20 /* MediaRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRowView.swift; sourceTree = "<group>"; };
 		FBE1C04C2702398900F41E20 /* MediaDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDataView.swift; sourceTree = "<group>"; };
+		FBE1C04F27060A9B00F41E20 /* RateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				FBE1C0492702369200F41E20 /* MediaRowView.swift */,
 				FBE1C0432702296000F41E20 /* SeriesView.swift */,
 				FBE1C01C2702139700F41E20 /* Assets.xcassets */,
+				FBE1C04F27060A9B00F41E20 /* RateView.swift */,
 				FBE1C0212702139700F41E20 /* Info.plist */,
 				FBE1C01E2702139700F41E20 /* Preview Content */,
 				FBE1C03C27021A2900F41E20 /* TMDBlogin.swift */,
@@ -189,6 +192,7 @@
 				FBE1C03A2702189F00F41E20 /* MediaModel.swift in Sources */,
 				FBE1C0412702294C00F41E20 /* MoviesView.swift in Sources */,
 				FBE1C0362702169700F41E20 /* Genre.swift in Sources */,
+				FBE1C05027060A9B00F41E20 /* RateView.swift in Sources */,
 				FBE1C01B2702139500F41E20 /* TMDBView.swift in Sources */,
 				FBE1C0192702139500F41E20 /* App05_TMDBApp.swift in Sources */,
 				FBE1C03D27021A2900F41E20 /* TMDBlogin.swift in Sources */,

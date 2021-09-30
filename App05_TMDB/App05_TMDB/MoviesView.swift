@@ -13,18 +13,22 @@ struct MoviesView: View {
     
     var body: some View {
         //Text("Movies")
-        ScrollView(.horizontal, showsIndicators: false){
-            HStack{
-                ForEach(mediaModel.moviesNowPlaying){
-                    movie in
-                    NavigationLink(destination: MediaDataView(media: movie)){
-                        MediaRowView(media: movie)
+        GeometryReader{ geo in
+            ScrollView(.horizontal, showsIndicators: false){
+                HStack{
+                    ForEach(mediaModel.moviesNowPlaying){
+                        movie in
+                        NavigationLink(destination: MediaDataView(media: movie)){
+                            MediaRowView(media: movie, width: geo.size.width)
+                        }
+                        //to be changed
+                        //Text(movie.title)
                     }
-                    //to be changed
-                    //Text(movie.title)
                 }
             }
         }
+        .navigationBarTitle("Movies", displayMode: .inline)
+        
     }
 }
 
