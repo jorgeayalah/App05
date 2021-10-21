@@ -17,8 +17,6 @@ class MediaModel : ObservableObject{
     
     init(){ //constructor
         loadGenres()
-        loadMoviesNowPlaying()
-        loadSeriesNowPlaying()
     }
     
     func loadGenres(){ //extract movie data from APIs on Dependencies
@@ -38,6 +36,8 @@ class MediaModel : ObservableObject{
                 self.genres.append(genre)
             }
         }
+        self.loadMoviesNowPlaying()
+        self.loadSeriesNowPlaying()
     }
     
     func loadMoviesNowPlaying(){ //extracts movies now playing data data from APIs on Dependencies
@@ -65,14 +65,14 @@ class MediaModel : ObservableObject{
                               poster: m.1["poster_path"].stringValue,
                               voteAvg: m.1["vote_average"].doubleValue,
                               genres: genresIDs,
-                              releaseDate: m.1["release_date"].stringValue)
+                              releaseDate: m.1["release_date"].stringValue,
+                              isMovie: true)
                 self.moviesNowPlaying.append(movie)
             }
         }
     }
     
     func loadSeriesNowPlaying(){ //extracts series now playing data from APIs on Dependencies
-        genres.removeAll()
         let URL = "\(tmdbURL)tv/on_the_air?api_key=\(apikey)&language=en-US&page=1"
         
         //connection to Alamofire
@@ -81,17 +81,37 @@ class MediaModel : ObservableObject{
             let json = try! JSON(data: data.data!) //creates an optional variable in case it doesnt contain data
             //print(json)
             
-            var genre : Genre
-            for j in json["genres"]{
-                genre = Genre(id: j.1["id"].intValue, name: j.1["name"].stringValue)
-                //print(genre.name)
-                self.genres.append(genre)
+            var serie: Media
+            
+            for m in json["results"]{
+                var genresIDs = [String]()
+                for g in m.1["genre_id"]{
+                    if let idx = genres.firstIndex(where: {$0.id == g.1.intValue}){
+                        genresIDs.append(self.genres[idx].name)
+                    }
+                    
+                }
+                serie = Media(id: m.1["id"].intValue,
+                              title: m.1["title"].stringValue,
+                              overview: m.1["overview"].stringValue,
+                              poster: m.1["poster_path"].stringValue,
+                              voteAvg: m.1["vote_average"].doubleValue,
+                              genres: genresIDs,
+                              releaseDate: m.1["release_date"].stringValue,
+                              isMovie: false)
+                self.moviesNowPlaying.append(serie)
             }
         }
     }
     
-    func loadMoviePosters(id: Int, handler: @escaping(_ returnedImages: [String]) -> ()){ //extracts series now playing data from APIs on Dependencies
-        let URL = "\(tmdbURL)movie/\(id)/images?api_key=\(apikey)" //change this
+    func loadPosters(id: Int, isMovie: Bool, handler: @escaping(_ returnedImages: [String]) -> ()){ //extracts series now playing data from APIs on Dependencies
+        var URL: String
+        if(isMovie){
+            URL = "\(tmdbURL)movie/\(id)/images?api_key=\(apikey)"
+        }else{
+            URL = "\(tmdbURL)tv/\(id)/images?api_key=\(apikey)"
+        }
+        //let URL = "\(tmdbURL)movie/\(id)/images?api_key=\(apikey)" //change this
         //connection to Alamofire
         AF.request(URL, method: .get, encoding: URLEncoding.default, headers: HTTPHeaders(headers)).responseData { [self] data in
             
@@ -107,8 +127,13 @@ class MediaModel : ObservableObject{
         }
     }
     
-    func loadMovieTrailers(id: Int, handler: @escaping(_ returnedTrailers: [Trailer]) -> ()){ //extracts trailers from movies now playing data from APIs on Dependencies
-        let URL = "\(tmdbURL)movie/\(id)/videos?api_key=\(apikey)&language=en-US" //change this
+    func loadTrailers(id: Int, isMovie: Bool, handler: @escaping(_ returnedTrailers: [Trailer]) -> ()){ //extracts trailers from movies now playing data from APIs on Dependencies
+        var URL: String
+        if(isMovie){
+            URL = "\(tmdbURL)movie/\(id)/videos?api_key=\(apikey)&language=en-US" //change this
+        }else{
+            URL = "\(tmdbURL)tv/\(id)/videos?api_key=\(apikey)&language=en-US"
+        }
         //connection to Alamofire
         AF.request(URL, method: .get, encoding: URLEncoding.default, headers: HTTPHeaders(headers)).responseData { [self] data in
             
@@ -127,4 +152,6 @@ class MediaModel : ObservableObject{
             handler(trailers)
         }
     }
+    
 }
+

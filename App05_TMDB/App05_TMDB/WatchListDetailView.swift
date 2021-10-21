@@ -1,16 +1,16 @@
 //
-//  MediaDataView.swift
+//  WatchListDetailView.swift
 //  App05_TMDB
 //
-//  Created by A00828633 on 27/09/21.
+//  Created by Alumno on 21/10/21.
 //
 
 import SwiftUI
 import Kingfisher
 
-struct MediaDataView: View {
-    @StateObject var mediaModel : MediaModel
-    var media : Media
+struct WatchListDetailView: View {
+    @ObservedObject var mediaModel : MediaModel //TMDBView is sending it
+    var media : WatchListModel
     @State var posters = [String]()
     @State var trailers = [Trailer]()
     
@@ -18,9 +18,9 @@ struct MediaDataView: View {
         GeometryReader { geo in
             ScrollView(.vertical, showsIndicators: false){
                 VStack{
-                    Text(media.title)
+                    Text(media.title_wrapped)
                         .font(.title)
-                    Text(media.overview)
+                    Text(media.overview_wrapped)
                         .font(.headline)
                         .multilineTextAlignment(.center)
                     ScrollView(.horizontal, showsIndicators: false){
@@ -50,11 +50,11 @@ struct MediaDataView: View {
                 }.padding(.horizontal, 20)
             }
             .onAppear{ //when the view opens for the first time
-                mediaModel.loadPosters(id: media.id, isMovie: media.isMovie, handler:{(returnedImages) in
+                mediaModel.loadPosters(id: Int(media.id), isMovie: media.isMovie, handler:{(returnedImages) in
                     self.posters.removeAll()
                     self.posters.append(contentsOf: returnedImages)
                 })
-                mediaModel.loadTrailers(id: media.id, isMovie: media.isMovie, handler:{(returnedTrailers) in
+                mediaModel.loadTrailers(id: Int(media.id), isMovie: media.isMovie,handler:{(returnedTrailers) in
                     self.trailers.removeAll()
                     self.trailers.append(contentsOf: returnedTrailers)
                 })
@@ -63,8 +63,8 @@ struct MediaDataView: View {
     }
 }
 
-struct MediaDataView_Previews: PreviewProvider {
+struct WatchListDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        MediaDataView(mediaModel: MediaModel(), media: Media.dummy)
+        WatchListDetailView(mediaModel: MediaModel(), media: WatchListModel())
     }
 }

@@ -23,16 +23,20 @@ struct TMDBView: View {
                     .tabItem{
                         Label("Movies", systemImage: "film.fill")
                     }
-                SeriesView()
+                SeriesView(mediaModel: MediaModel())
                     .tabItem{
                         Label("Series", systemImage: "tv.fill")
                     }
+                WatchListView(mediaModel: mediaModel)
+                    .tabItem{
+                        Label("WatchList", systemImage: "list.star")}
             }
-            
-            .navigationBarTitle("Catalogue", displayMode: .inline)
         }
+        
+        .navigationBarTitle("Catalogue", displayMode: .inline)
     }
 }
+
 
 struct TMDBView_Previews: PreviewProvider {
     static var previews: some View {
